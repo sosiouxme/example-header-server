@@ -1,0 +1,40 @@
+apiVersion: "v1"
+kind: "Template"
+metadata:
+  name: route-template
+  annotations:
+    description: "Template for deploying a route for a service."
+    tags: "infrastructure"
+objects:
+-
+  apiVersion: v1
+  kind: Route
+  metadata:
+    name: ${NAME}
+  spec:
+    host: ${HOSTNAME}
+    to:
+      kind: Service
+      name: ${NAME}
+    tls:
+      termination: edge
+      key: ${SERVER_KEY}
+      certificate: ${SERVER_CERT}
+parameters:
+-
+  description: "A private key (PEM) for the route - $(cat <file>)"
+  name: SERVER_KEY
+  required: true
+-
+  description: "A certificate (PEM) for the route - $(cat <file>)"
+  name: SERVER_CERT
+  required: true
+-
+  description: "Hostname at which users will visit the route."
+  name: HOSTNAME
+  required: true
+-
+  description: "Name for route and service."
+  name: NAME
+  value: "header-server"
+
